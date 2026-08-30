@@ -1,0 +1,121 @@
+==========================================
+GUIDE GIT - Projet ElBourakSuiveur
+Repo: https://github.com/MaleBenAttia/ElBourakSuiveur
+Branches: Malek (pour toi) / Amen (pour ton amie)
+==========================================
+
+--------------------------------------------------
+1. PREMIERE FOIS - CLONER LE PROJET (pour ton amie)
+--------------------------------------------------
+# Cloner le repo (une seule fois)
+git clone https://github.com/MaleBenAttia/ElBourakSuiveur.git
+
+cd ElBourakSuiveur
+
+# Voir toutes les branches
+git branch -a
+
+--------------------------------------------------
+2. POUR TOI - MALEK (branche Malek)
+--------------------------------------------------
+# Tu es deja sur Malek. Pour verifier :
+git branch
+# doit afficher * Malek
+
+# Si tu es sur une autre branche, reviens sur Malek :
+git checkout Malek
+
+# 1) Recuperer les dernieres modifs (toujours faire avant de coder)
+git pull origin Malek
+
+# 2) Travailler, puis ajouter tes fichiers
+git status
+git add .
+# ou fichier par fichier: git add ElBourak1.ino
+
+# 3) Commit
+git commit -m "description de ta modif"
+
+# 4) Pousser vers GitHub
+git push origin Malek
+# (la premiere fois tu as deja fait git push -u origin Malek, maintenant git push suffit)
+
+--------------------------------------------------
+3. POUR TON AMIE - AMEN (branche Amen)
+--------------------------------------------------
+# Apres le clone, se mettre sur la branche Amen :
+git checkout Amen
+# Si la branche Amen n'existe pas en local mais existe sur GitHub :
+git fetch origin
+git checkout Amen
+# ou : git checkout -b Amen origin/Amen
+
+# Verifier qu'elle est bien sur Amen :
+git branch
+# doit afficher * Amen
+
+# 1) Recuperer les dernieres modifs d'Amen (toujours faire avant de coder)
+git pull origin Amen
+
+# 2) Travailler, puis ajouter
+git status
+git add .
+git commit -m "description de sa modif"
+
+# 3) Pousser vers GitHub sur Amen
+git push origin Amen
+# (la premiere fois: git push -u origin Amen)
+
+--------------------------------------------------
+4. COMMANDES UTILES POUR LES DEUX
+--------------------------------------------------
+# Voir sur quelle branche tu es
+git branch
+
+# Voir l'etat des fichiers
+git status
+
+# Voir l'historique
+git log --oneline --all --graph -10
+
+# Voir les branches distantes
+git remote -v
+git branch -a
+
+# Changer de branche
+git checkout Malek
+git checkout Amen
+
+# Mettre a jour la liste des branches depuis GitHub
+git fetch origin
+
+# Annuler un git add (avant commit)
+git restore --staged nom_du_fichier
+
+--------------------------------------------------
+5. ATTENTION - NE PAS SE TROMPER DE BRANCHE
+--------------------------------------------------
+TOI -> tu pousses TOUJOURS sur Malek : git push origin Malek
+ELLE -> elle pousse TOUJOURS sur Amen : git push origin Amen
+
+Ne jamais faire git push origin main/master
+
+Avant chaque push, verifie ta branche avec: git branch
+
+--------------------------------------------------
+6. SI VOUS VOULEZ FUSIONNER PLUS TARD
+--------------------------------------------------
+# Par exemple, fusionner Amen dans Malek (a faire sur Malek)
+git checkout Malek
+git pull origin Malek
+git merge Amen
+git push origin Malek
+
+# Ou creer une Pull Request sur GitHub:
+# https://github.com/MaleBenAttia/ElBourakSuiveur/pull/new/Amen
+# ou
+# https://github.com/MaleBenAttia/ElBourakSuiveur/pull/new/Malek
+
+==========================================
+Besoin d'aide: git status vous dit tout !
+==========================================
