@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP32 Configuration Champion - Guide de Câblage</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .subsection-title {
+            color: #2a5298;
+            font-size: 1.4em;
+            margin: 25px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        thead {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 1.05em;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        tbody tr:hover {
+            background: #f5f7ff;
+            transition: background 0.3s ease;
+        }
+        
+        tbody tr:nth-child(even) {
+            background: #fafafa;
+        }
+        
+        .critical {
+            background: #fff3cd;
+            font-weight: bold;
+        }
+        
+        .power {
+            background: #d4edda;
+        }
+        
+        .io {
+            background: #d1ecf1;
+        }
+        
+        .output {
+            background: #e7d4ff;
+        }
+        
+        .analog {
+            background: #ffe4cc;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .danger-box {
+            background: #f8d7da;
+            border-left: 5px solid #dc3545;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .info-box {
+            background: #d1ecf1;
+            border-left: 5px solid #17a2b8;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .success-box {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .tip {
+            background: #e7f3ff;
+            border-left: 5px solid #2196F3;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .tip-title {
+            font-weight: bold;
+            color: #1976d2;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tip-title::before {
+            content: "💡";
+            margin-right: 10px;
+            font-size: 1.3em;
+        }
+        
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #c7254e;
+        }
+        
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+        
+        ul, ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .legend-color {
+            width: 30px;
+            height: 20px;
+            border-radius: 3px;
+            border: 1px solid #ddd;
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .container {
+                box-shadow: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+            
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            table {
+                font-size: 0.9em;
+            }
+            
+            th, td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚡ Configuration Champion ESP32 ⚡</h1>
+            <p>Guide de Câblage Optimal - ESP32 38-PINS</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">📋 Votre bible pour le montage - Ne changez rien sans vérifier</p>
+        </header>
+        
+        <div class="content">
+            <!-- SECTION 1: TABLEAU DE CÂBLAGE -->
+            <div class="section">
+                <h2 class="section-title">1. 📊 Tableau de Câblage Optimal</h2>
+                
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color critical"></div>
+                        <span>Critique</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color power"></div>
+                        <span>Power</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color io"></div>
+                        <span>I/O</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color output"></div>
+                        <span>Output</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color analog"></div>
+                        <span>Analog</span>
+                    </div>
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Système</th>
+                            <th>Composant / Broche</th>
+                            <th>Pin ESP32 (GPIO)</th>
+                            <th>Type</th>
+                            <th>Commentaire / Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- ALIMENTATION -->
+                        <tr>
+                            <td rowspan="2"><strong>ALIMENTATION</strong></td>
+                            <td>GND (Masse)</td>
+                            <td><code>GND</code></td>
+                            <td class="critical">CRITIQUE</td>
+                            <td>Relier TOUS les GND ensemble (Batterie, Drivers, ESP, Mux)</td>
+                        </tr>
+                        <tr>
+                            <td>VIN (5V)</td>
+                            <td><code>VIN</code></td>
+                            <td class="power">Power</td>
+                            <td>Entrée 5V régulée (depuis le LM2596 ou BEC)</td>
+                        </tr>
+                        
+                        <!-- I2C BUS -->
+                        <tr>
+                            <td rowspan="2"><strong>I2C (BUS)</strong></td>
+                            <td>OLED SDA + MPU SDA</td>
+                            <td><code>GPIO 21</code></td>
+                            <td class="io">I/O</td>
+                            <td>Relier les deux fils SDA ici</td>
+                        </tr>
+                        <tr>
+                            <td>OLED SCL + MPU SCL</td>
+                            <td><code>GPIO 22</code></td>
+                            <td class="io">I/O</td>
+                            <td>Relier les deux fils SCL ici</td>
+                        </tr>
+                        
+                        <!-- ENCODEURS -->
+                        <tr>
+                            <td rowspan="4"><strong>ENCODEURS<br>(Vitesse)</strong></td>
+                            <td>Gauche A (Jaune)</td>
+                            <td><code>GPIO 34</code></td>
+                            <td class="io">Input Only</td>
+                            <td>Signal Rapide (Interruption). Pas de pullup interne, OK car encodeur push-pull</td>
+                        </tr>
+                        <tr>
+                            <td>Gauche B (Blanc)</td>
+                            <td><code>GPIO 32</code></td>
+                            <td class="io">I/O</td>
+                            <td>Sens de rotation</td>
+                        </tr>
+                        <tr>
+                            <td>Droit A (Jaune)</td>
+                            <td><code>GPIO 35</code></td>
+                            <td class="io">Input Only</td>
+                            <td>Signal Rapide (Interruption)</td>
+                        </tr>
+                        <tr>
+                            <td>Droit B (Blanc)</td>
+                            <td><code>GPIO 33</code></td>
+                            <td class="io">I/O</td>
+                            <td>Sens de rotation</td>
+                        </tr>
+                        
+                        <!-- MOTEURS -->
+                        <tr>
+                            <td rowspan="5"><strong>MOTEURS<br>(BTS7960)</strong></td>
+                            <td>Gauche PWM 1</td>
+                            <td><code>GPIO 19</code></td>
+                            <td class="output">Output</td>
+                            <td>Commande Moteur Gauche (Avant)</td>
+                        </tr>
+                        <tr>
+                            <td>Gauche PWM 2</td>
+                            <td><code>GPIO 18</code></td>
+                            <td class="output">Output</td>
+                            <td>Commande Moteur Gauche (Arrière)</td>
+                        </tr>
+                        <tr>
+                            <td>Droit PWM 1</td>
+                            <td><code>GPIO 5</code></td>
+                            <td class="output">Output</td>
+                            <td>Commande Moteur Droit (Avant)</td>
+                        </tr>
+                        <tr>
+                            <td>Droit PWM 2</td>
+                            <td><code>GPIO 17</code></td>
+                            <td class="output">Output</td>
+                            <td>Commande Moteur Droit (Arrière)</td>
+                        </tr>
+                        <tr class="critical">
+                            <td>R_EN & L_EN</td>
+                            <td><code>5V / 3.3V</code></td>
+                            <td class="power">Power</td>
+                            <td><strong>Ne pas relier à l'ESP !</strong> Relier directement au 5V pour activer les drivers en permanence</td>
+                        </tr>
+                        
+                        <!-- CAPTEURS -->
+                        <tr>
+                            <td rowspan="6"><strong>CAPTEURS<br>(Multiplexeur)</strong></td>
+                            <td>Signal (Z / SIG)</td>
+                            <td><code>GPIO 36 (VP)</code></td>
+                            <td class="analog">Analog (ADC1)</td>
+                            <td>Le pin le plus propre de l'ESP32. Input Only</td>
+                        </tr>
+                        <tr>
+                            <td>S0 (Adresse A)</td>
+                            <td><code>GPIO 25</code></td>
+                            <td class="output">Output</td>
+                            <td>Sélection binaire</td>
+                        </tr>
+                        <tr>
+                            <td>S1 (Adresse B)</td>
+                            <td><code>GPIO 26</code></td>
+                            <td class="output">Output</td>
+                            <td>Sélection binaire</td>
+                        </tr>
+                        <tr>
+                            <td>S2 (Adresse C)</td>
+                            <td><code>GPIO 27</code></td>
+                            <td class="output">Output</td>
+                            <td>Sélection binaire</td>
+                        </tr>
+                        <tr>
+                            <td>S3 (Adresse D)</td>
+                            <td><code>GPIO 14</code></td>
+                            <td class="output">Output</td>
+                            <td>Sélection binaire</td>
+                        </tr>
+                        <tr>
+                            <td>Enable (E)</td>
+                            <td><code>GND</code></td>
+                            <td class="power">Power</td>
+                            <td>Relier au GND pour activer le Multiplexeur</td>
+                        </tr>
+                        
+                        <!-- INTERFACE -->
+                        <tr>
+                            <td rowspan="2"><strong>INTERFACE</strong></td>
+                            <td>Bouton + LED</td>
+                            <td><code>GPIO 4</code></td>
+                            <td class="io">I/O</td>
+                            <td class="critical"><strong>ATTENTION :</strong> Utiliser le montage avec résistance 470Ω</td>
+                        </tr>
+                        <tr>
+                            <td>LED Board</td>
+                            <td><code>GPIO 2</code></td>
+                            <td class="output">Output</td>
+                            <td>Déjà sur la carte (pour débugger sans fil)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- SECTION 2: PINS INTERDITS -->
+            <div class="section">
+                <h2 class="section-title">2. 🚫 Tableau des Pins INTERDITS</h2>
+                
+                <div class="danger-box">
+                    <h3 style="color: #721c24; margin-bottom: 10px;">⚠️ NE PAS TOUCHER !</h3>
+                    <p><strong>Si vous branchez quelque chose ici, le robot ne démarrera pas ou plantera aléatoirement.</strong></p>
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Pin ESP32</th>
+                            <th>Nom</th>
+                            <th>Pourquoi c'est interdit ?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>GPIO 6 à 11</code></td>
+                            <td>Flash SPI</td>
+                            <td>Connectés à la mémoire interne. <strong>Arrêt immédiat du robot.</strong></td>
+                        </tr>
+                        <tr>
+                            <td><code>GPIO 0</code></td>
+                            <td>BOOT</td>
+                            <td>Si LOW au démarrage (0V), l'ESP attend une programmation.</td>
+                        </tr>
+                        <tr>
+                            <td><code>GPIO 1 & 3</code></td>
+                            <td>TX / RX</td>
+                            <td>Utilisés pour téléverser le code via USB.</td>
+                        </tr>
+                        <tr>
+                            <td><code>GPIO 12</code></td>
+                            <td>MTDI</td>
+                            <td>Si HIGH au démarrage, voltage flash incorrect → <strong>Plantage.</strong></td>
+                        </tr>
+                        <tr>
+                            <td><code>GPIO 15</code></td>
+                            <td>MTDO</td>
+                            <td>Doit être LOW au démarrage. (Certains drivers moteurs le tirent HIGH, attention).</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- SECTION 3: CONSEILS DE PRO -->
+            <div class="section">
+                <h2 class="section-title">3. 🏆 Conseils de PRO (Pour la compétition)</h2>
+                
+                <!-- Conseil A -->
+                <h3 class="subsection-title">A. Le GND en Étoile (Star Ground)</h3>
+                <div class="tip">
+                    <div class="tip-title">Configuration Recommandée</div>
+                    <p><strong>Ne faites pas une chaîne</strong> (Batterie → ESP → Moteur).</p>
+                    <p><strong>Faites une "Étoile" :</strong></p>
+                </div>
+                
+                <ol>
+                    <li>Le GND de la Batterie arrive sur un gros bornier (Wago ou soudure).</li>
+                    <li>De ce point central partent 3 fils :
+                        <ul>
+                            <li>Vers l'ESP32</li>
+                            <li>Vers le Driver Moteur Gauche</li>
+                            <li>Vers le Driver Moteur Droit</li>
+                        </ul>
+                    </li>
+                </ol>
+                
+                <div class="info-box">
+                    <strong>💡 Pourquoi ?</strong> Quand les moteurs tirent 5 Ampères, cela crée du bruit. Si l'ESP est en bout de chaîne, il redémarre (Brownout).
+                </div>
+                
+                <!-- Conseil B -->
+                <h3 class="subsection-title">B. Le Condensateur "Sauveur de Vie"</h3>
+                <div class="success-box">
+                    <p>Soudez un <strong>condensateur électrolytique</strong> (le cylindre noir, ex: 470µF 16V ou 100µF) directement sur les broches 5V et GND de l'ESP32 (ou sur votre carte de distribution).</p>
+                </div>
+                
+                <div class="warning-box">
+                    <strong>⚠️ Attention à la polarité :</strong> La bande blanche/grise du condensateur sur le MOINS (GND).
+                </div>
+                
+                <!-- Conseil C -->
+                <h3 class="subsection-title">C. Torsader les Câbles (Twisted Pairs)</h3>
+                <div class="tip">
+                    <div class="tip-title">Câbles à Torsader</div>
+                    <ul>
+                        <li>Pour les fils des moteurs (les gros qui vont aux roues)</li>
+                        <li>Pour les fils des encodeurs (A, B, 5V, GND)</li>
+                    </ul>
+                </div>
+                
+                <p><strong>Technique :</strong> Prenez les fils et torsadez-les comme une tresse.</p>
+                
+                <div class="info-box">
+                    <strong>💡 Pourquoi ?</strong> Cela annule les champs magnétiques. Sans ça, quand le moteur tourne vite, il peut déclencher des "faux ticks" sur l'encodeur voisin.
+                </div>
+                
+                <!-- Conseil D -->
+                <h3 class="subsection-title">D. La Résistance de Sécurité du Bouton (GPIO 4)</h3>
+                <div class="warning-box">
+                    <strong>⚠️ Important :</strong> N'oubliez pas la résistance de <strong>470 Ohms</strong> (ou 1k Ohms) en série entre le GPIO 4 et la LED du bouton.
+                    <p style="margin-top: 10px;">C'est ce qui empêche de griller le processeur quand vous appuyez sur le bouton.</p>
+                </div>
+                
+                <!-- Conseil E -->
+                <h3 class="subsection-title">E. Mises à Jour du Code <code>bourak.h</code></h3>
+                <p>Pour que ce câblage fonctionne, modifiez simplement vos <code>#define</code> dans <code>bourak.h</code> :</p>
+                
+                <pre><code>// --- MOTEURS ---
+#define IN1 19  // Gauche Av
+#define IN2 18  // Gauche Ar
+#define IN3 5   // Droit Av
+#define IN4 17  // Droit Ar
+
+// --- CAPTEURS (MUX) ---
+#define S0 25
+#define S1 26
+#define S2 27
+#define S3 14
+#define SIG 36  // GPIO 36 (VP)
+
+// --- INTERFACE ---
+#define BTN_PIN 4</code></pre>
+            </div>
+            
+            <!-- RÉCAPITULATIF FINAL -->
+            <div class="section">
+                <div class="success-box">
+                    <h3 style="color: #155724; margin-bottom: 15px;">✅ Checklist Finale</h3>
+                    <ul style="list-style: none; margin-left: 0;">
+                        <li>☐ Tous les GND reliés en étoile</li>
+                        <li>☐ Condensateur 470µF sur 5V/GND de l'ESP</li>
+                        <li>☐ Câbles moteurs et encodeurs torsadés</li>
+                        <li>☐ Résistance 470Ω sur GPIO 4</li>
+                        <li>☐ R_EN & L_EN connectés au 5V (pas à l'ESP)</li>
+                        <li>☐ Aucun fil sur les pins interdits</li>
+                        <li>☐ Code <code>bourak.h</code> mis à jour</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
