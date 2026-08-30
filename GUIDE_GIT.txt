@@ -1,0 +1,279 @@
+==========================================
+GUIDE GIT - Projet ElBourakTT / ElBourakSuiveur
+Repo: https://github.com/MaleBenAttia/ElBourakTT
+      https://github.com/MaleBenAttia/ElBourakSuiveur
+Branches: Malek (pour toi) / Amen (pour ton amie)
+Date: 30/08/2026
+==========================================
+
+PRINCIPE:
+- Tu travailles TOUJOURS sur la branche Malek
+- Ton amie Amen travaille TOUJOURS sur la branche Amen
+- Chacun pousse (push) et recupere (pull) uniquement sur SA branche
+- Jamais sur main (main n'existe plus, c'est normal)
+
+==================================================
+1. PREMIERE FOIS - CLONER LE PROJET (pour Amen)
+==================================================
+# Amen doit cloner UNE SEULE FOIS au debut :
+git clone https://github.com/MaleBenAttia/ElBourakTT.git
+# ou si vous utilisez ElBourakSuiveur :
+# git clone https://github.com/MaleBenAttia/ElBourakSuiveur.git
+
+cd ElBourakTT
+# ou cd ElBourakSuiveur selon le repo clone
+
+# Voir toutes les branches (locales + distantes)
+git branch -a
+# Tu dois voir :
+# * Malek
+#   remotes/origin/Malek
+#   remotes/origin/Amen
+
+# Si Amen ne voit pas sa branche en local, la recuperer :
+git fetch origin
+git checkout Amen
+# Git va creer automatiquement la branche locale Amen qui suit origin/Amen
+# Alternative explicite :
+# git checkout -b Amen origin/Amen
+
+# Verifier qu'elle est bien sur Amen :
+git branch
+# doit afficher :
+# * Amen
+#   Malek
+
+==================================================
+2. POUR TOI - MALEK (branche Malek)
+==================================================
+# Verifier sur quelle branche tu es :
+git branch
+# doit afficher * Malek
+# Si tu es sur Amen ou autre, reviens sur Malek :
+git checkout Malek
+
+# ------ WORKFLOW QUOTIDIEN ------
+
+# 1) TOUJOURS recuperer les dernieres modifs AVANT de coder
+git pull origin Malek
+# Si git te dit "Already up to date" c'est OK
+# Si il y a des modifs, elles arrivent automatiquement
+
+# 2) Travailler sur ton code (Arduino, .h, .ino etc.)
+# Exemple: modifier ElBourakTT.ino, Controller.h...
+
+# 3) Voir ce qui a change
+git status
+# Fichiers en rouge = modifies non ajoutes
+# Fichiers en vert = prets a etre commit
+
+# 4) Ajouter tes fichiers
+git add .
+# ou fichier par fichier (plus propre) :
+# git add ElBourakTT.ino
+# git add Controller.h
+# git add mpu.h pins_encoders.h
+
+# 5) Commit (enregistrer en local)
+git commit -m "description claire de ta modif"
+# Exemples :
+# git commit -m "fix: correction PID virage"
+# git commit -m "feat: ajout suivi ligne"
+
+# 6) Pousser vers GitHub sur TA branche
+git push origin Malek
+# La premiere fois tu avais fait : git push -u origin Malek
+# Maintenant git push suffit si tu es deja sur Malek
+# Si ca marche tu vois : "To https://github.com/... * [new branch] Malek -> Malek" ou "X files changed"
+
+# Raccourci si branche deja liee (apres -u) :
+# git push
+# mais git push origin Malek est plus sur (evite erreur de branche)
+
+==================================================
+3. POUR TON AMIE - AMEN (branche Amen) - DETAILLE
+==================================================
+# Apres le clone, se mettre sur la branche Amen :
+git fetch origin
+git checkout Amen
+
+# Verifier :
+git branch
+# doit afficher * Amen
+
+# ------ WORKFLOW QUOTIDIEN POUR AMEN ------
+
+# 1) TOUJOURS faire un pull AVANT de commencer a coder :
+git pull origin Amen
+# Important : si tu oublies le pull, tu risques un conflit au push
+
+# 2) Travailler / coder
+# Elle modifie ses fichiers sur SA branche Amen
+# Elle ne touche JAMAIS a Malek
+
+# 3) Verifier l'etat
+git status
+
+# 4) Ajouter
+git add .
+# ou : git add nom_du_fichier
+
+# 5) Commit
+git commit -m "description de sa modif"
+# Exemple : git commit -m "Amen: ajout test capteur"
+
+# 6) Pousser sur Amen
+git push origin Amen
+
+# VERIFICATION :
+# Aller sur https://github.com/MaleBenAttia/ElBourakTT
+# En haut tu as un selecteur de branche : choisir "Amen"
+# Tu dois voir son commit apparaitre
+
+# ERREUR COURANTE POUR AMEN :
+# Si elle fait par erreur git push origin Malek -> refuse ou pousse au mauvais endroit
+# Toujours verifier avant push :
+git branch
+# doit montrer * Amen avant de faire git push origin Amen
+
+==================================================
+4. COMMANDES UTILES POUR LES DEUX
+==================================================
+# Voir sur quelle branche tu es (etoile = branche actuelle)
+git branch
+
+# Voir TOUTES les branches (locales + GitHub)
+git branch -a
+
+# Voir l'etat des fichiers modifies
+git status
+
+# Voir l'historique (joli graphe)
+git log --oneline --all --graph -10
+# Exemple sortie :
+# * 47ce0e2 (Amen, Malek) Initial commit
+
+# Voir les branches distantes et URL
+git remote -v
+# doit afficher :
+# origin https://github.com/MaleBenAttia/ElBourakTT.git (fetch)
+# origin https://github.com/MaleBenAttia/ElBourakTT.git (push)
+
+# Changer de branche
+git checkout Malek
+git checkout Amen
+
+# Mettre a jour la liste des branches depuis GitHub sans pull
+git fetch origin
+
+# Voir les differences avant commit
+git diff
+git diff --staged
+
+# Annuler un git add (avant commit) - le fichier reste modifie mais plus dans le commit
+git restore --staged nom_du_fichier
+
+# Annuler les modifs d'un fichier (ATTENTION: perd les modifs)
+git restore nom_du_fichier
+
+# Annuler le dernier commit local (garde les modifs)
+git reset --soft HEAD~1
+
+==================================================
+5. ATTENTION - NE PAS SE TROMPER DE BRANCHE
+==================================================
+TOI  -> tu pousses TOUJOURS sur Malek : git push origin Malek
+ELLE -> elle pousse TOUJOURS sur Amen  : git push origin Amen
+
+Ne jamais faire git push origin main  (main n'existe plus)
+
+AVANT CHAQUE push, verifie ta branche avec: git branch
+AVANT CHAQUE pull, verifie aussi: git branch
+
+Si tu te trompes de branche :
+# tu es sur Amen mais tu voulais etre sur Malek
+git checkout Malek
+# puis refais ton travail ou cherry-pick si besoin
+
+==================================================
+6. CAS D'ERREURS ET SOLUTIONS
+==================================================
+# --- Erreur au push : "rejected" ou "failed to push" ---
+# Cause : quelqu'un a pousse avant toi, ton local est en retard
+git pull origin Malek   # ou Amen selon ta branche
+# Resoudre les conflits si demande, puis :
+git push origin Malek
+
+# --- Conflit au pull (CONFLICT) ---
+# Git te dit quels fichiers sont en conflit
+git status
+# Ouvre les fichiers, cherche <<<<<<< ======= >>>>>>>
+# Choisis la bonne version, supprime les marqueurs
+git add fichier_en_conflit
+git commit -m "resolve conflict"
+git push origin Malek
+
+# --- Tu as commit sur la mauvaise branche ---
+# Ex: tu etais sur Amen mais tu voulais Malek
+# 1. Garde le commit en memoire
+git log --oneline -3  # note le hash du commit
+# 2. Va sur la bonne branche
+git checkout Malek
+# 3. Recupere le commit
+git cherry-pick <hash>
+# 4. Retourne sur la mauvaise branche et supprime le commit
+git checkout Amen
+git reset --hard HEAD~1
+
+# --- Tu veux voir ce que l'autre a fait sans fusionner ---
+git fetch origin
+git log origin/Amen --oneline -5   # voir commits d'Amen depuis Malek
+git log origin/Malek --oneline -5  # voir commits de Malek depuis Amen
+
+==================================================
+7. SI VOUS VOULEZ FUSIONNER PLUS TARD
+==================================================
+# Option A : Fusionner Amen dans Malek en local
+git checkout Malek
+git pull origin Malek
+git merge Amen
+# Si conflit -> resoudre puis commit
+git push origin Malek
+
+# Option B : Fusionner Malek dans Amen
+git checkout Amen
+git pull origin Amen
+git merge Malek
+git push origin Amen
+
+# Option C : Pull Request sur GitHub (plus propre, conseille)
+# Aller sur :
+# https://github.com/MaleBenAttia/ElBourakTT/pull/new/Amen
+# ou
+# https://github.com/MaleBenAttia/ElBourakTT/pull/new/Malek
+# Choisir base: Malek  compare: Amen  (ou inverse)
+# Cliquer "Create pull request" -> "Merge"
+
+==========================================
+RAPPEL ULTRA COURT (a coller au mur)
+==========================================
+# MALEK :
+git checkout Malek
+git pull origin Malek
+# ... coder ...
+git add .
+git commit -m "message"
+git push origin Malek
+
+# AMEN :
+git checkout Amen
+git pull origin Amen
+# ... coder ...
+git add .
+git commit -m "message"
+git push origin Amen
+
+Besoin d'aide: git status vous dit tout !
+Repo TT: https://github.com/MaleBenAttia/ElBourakTT
+Repo Suiveur: https://github.com/MaleBenAttia/ElBourakSuiveur
+==========================================
